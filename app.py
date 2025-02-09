@@ -17,38 +17,6 @@ model_choice = st.selectbox('Pilih Model Prediksi:', ['KMEANS', 'HAC'])
 
 if model_choice == 'HAC':
     st.subheader("HAC Model")
-
-   import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import joblib
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
-from sklearn.cluster import AgglomerativeClustering, KMeans
-from sklearn.metrics import silhouette_score
-
-# Streamlit UI for model selection
-st.title("Clustering Visualization: KMEANS vs HAC")
-
-model_choice = st.selectbox('Pilih Model Prediksi:', ['KMEANS', 'HAC'])
-
-file_path = 'dataset.csv'  # Define file path outside the condition
-
-try:
-    data = pd.read_csv(file_path, sep=';')
-    st.write("Dataset successfully loaded from local file.")
-except FileNotFoundError:
-    st.error(f"File {file_path} not found. Please check the directory.")
-    st.stop()
-
-st.write("Dataset Information:")
-st.write(data.describe())  # Changed from data.info() to a more readable format in Streamlit
-
-if model_choice == 'HAC':
-    st.subheader("Hierarchical Agglomerative Clustering (HAC)")
     
     # File uploader
     uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
