@@ -27,7 +27,7 @@ if model_choice == 'HAC':
         st.write("Dataset Information:")
         st.write(data.info())
     
-    data_features = data[['Price', 'Number Sold', 'Total Review']].fillna(data[['Price', 'Number Sold', 'Total Review']].median())
+        data_features = data[['Price', 'Number Sold', 'Total Review']].fillna(data[['Price', 'Number Sold', 'Total Review']].median())
     
     # Standardizing the data
     scaler = StandardScaler()
