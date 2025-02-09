@@ -124,12 +124,13 @@ elif model_choice == 'KMEANS':
 
     # Load the dataset from a local file instead of requiring an upload
     file_path = 'dataset.csv'
-try:
-    data = pd.read_csv(file_path, sep=';')
-    st.write("Dataset successfully loaded from local file.")
-except FileNotFoundError:
-    st.error(f"File {file_path} not found. Please check the directory.")
-    st.stop()
+
+    try:
+        data = pd.read_csv(file_path, sep=';')
+        st.write("Dataset successfully loaded from local file.")
+    except FileNotFoundError:
+        st.error(f"File {file_path} not found. Please check the directory.")
+        st.stop()
 
     st.write("Dataset Information:")
     st.write(data.info())
