@@ -71,6 +71,33 @@ if uploaded_file is not None:
     sns.scatterplot(x='PCA1', y='PCA2', hue='Cluster', data=pca_df, palette='Set2', s=100, edgecolor='black', ax=ax)
     ax.set_title("PCA Visualization of Clusters")
     st.pyplot(fig)
+
+     # Scatter Plot Number Sold vs Price
+    st.subheader("Number Sold vs Price")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(x='Price', y='Number Sold', hue='Category', data=data, palette='Set2', s=100, edgecolor='black', ax=ax)
+    ax.set_title("Number Sold vs Price (2D Visualization)")
+    st.pyplot(fig)
+    
+    # Scatter Plot Number Sold vs Total Review
+    st.subheader("Number Sold vs Total Review")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(x='Total Review', y='Number Sold', hue='Category', data=data, palette='Set2', s=100, edgecolor='black', ax=ax)
+    ax.set_title("Number Sold vs Total Review (2D Visualization)")
+    st.pyplot(fig)
+    
+    # Bar Chart for Category Statistics
+    st.subheader("Average Values per Category")
+    avg_data = data.groupby('Category')[['Number Sold', 'Price', 'Total Review']].mean()
+    
+    fig, axes = plt.subplots(3, 1, figsize=(12, 18))
+    avg_data['Number Sold'].plot(kind='bar', ax=axes[0], color='lightblue', edgecolor='black')
+    axes[0].set_title('Single Number Sold by Category')
+    avg_data['Price'].plot(kind='bar', ax=axes[1], color='lightgreen', edgecolor='black')
+    axes[1].set_title('Single Price by Category')
+    avg_data['Total Review'].plot(kind='bar', ax=axes[2], color='salmon', edgecolor='black')
+    axes[2].set_title('Single Total Review by Category')
+    st.pyplot(fig)
     
     # Dendrogram
     st.subheader("Dendrogram")
