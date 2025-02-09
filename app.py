@@ -22,16 +22,25 @@ if model_choice == 'HAC':
     uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
 
     if uploaded_file is not None:
-        data = pd.read_csv(uploaded_file, sep=';')
-    
-        st.write("Dataset Information:")
-        st.write(data.info())
-    
-        data_features = data[['Price', 'Number Sold', 'Total Review']].fillna(data[['Price', 'Number Sold', 'Total Review']].median())
-    
+    data = pd.read_csv(uploaded_file, sep=';')
+
+    st.write("Dataset Information:")
+    st.write(data.describe())  # Gantilah data.info() dengan data.describe()
+
+    # Pastikan hanya mengambil kolom numerik
+    numeric_cols = ['Price', 'Number Sold', 'Total Review']
+    data_features = data[numeric_cols]
+
+    # Gantilah NaN dengan median
+    data_features = data_features.fillna(data_features.median())
+
+    # Pastikan tidak ada string di dalam fitur numerik
+    for col in numeric_cols:
+        data_features[col] = pd.to_numeric(data_features[col], errors='coerce')
+
     # Standardizing the data
     scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(data_features)
+    scaled_data = scaler.fit_transform(data_features)  # Tidak akan error lagi
     
     # Applying Agglomerative Clustering
     clustering = AgglomerativeClustering(n_clusters=4, linkage='single')
@@ -119,11 +128,15 @@ if model_choice == 'HAC':
 elif model_choice == 'KMEANS':
     st.subheader("KMEANS Model")
 
-    if uploaded_file is not None:
-        data = pd.read_csv(uploaded_file, sep=';')
-    
-        st.write("Dataset Information:")
-        st.write(data.info())
+    if uploaded_file is None:
+        st.error("Silakan unggah file CSV terlebih dahulu.")
+        st.stop()
+
+    data = pd.read_csv(uploaded_file, sep=';')
+
+    st.write("Dataset Information:")
+    st.write(data.describe())  # Menggunakan describe() untuk ringkasan data
+
     
     # Selecting relevant features
     features = data[['Price', 'Number Sold', 'Total Review']]
