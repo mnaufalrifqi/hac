@@ -18,17 +18,17 @@ model_choice = st.selectbox('Pilih Model Prediksi:', ['KMEANS', 'HAC'])
 if model_choice == 'HAC':
     st.subheader("HAC Model")
 
-# Load the dataset from a local file instead of requiring an upload
-file_path = 'dataset.csv'
-try:
+    # Load the dataset from a local file instead of requiring an upload
+    file_path = 'dataset.csv'
+    try:
     data = pd.read_csv(file_path, sep=';')
     st.write("Dataset successfully loaded from local file.")
-except FileNotFoundError:
+    except FileNotFoundError:
     st.error(f"File {file_path} not found. Please check the directory.")
     st.stop()
 
-st.write("Dataset Information:")
-st.write(data.info())
+    st.write("Dataset Information:")
+    st.write(data.info())
     
     data_features = data[['Price', 'Number Sold', 'Total Review']].fillna(data[['Price', 'Number Sold', 'Total Review']].median())
     
@@ -122,17 +122,17 @@ st.write(data.info())
 elif model_choice == 'KMEANS':
     st.subheader("KMEANS Model")
 
-# Load the dataset from a local file instead of requiring an upload
-file_path = 'dataset.csv'
-try:
+    # Load the dataset from a local file instead of requiring an upload
+    file_path = 'dataset.csv'
+    try:
     data = pd.read_csv(file_path, sep=';')
     st.write("Dataset successfully loaded from local file.")
-except FileNotFoundError:
+    except FileNotFoundError:
     st.error(f"File {file_path} not found. Please check the directory.")
     st.stop()
 
-st.write("Dataset Information:")
-st.write(data.info())
+    st.write("Dataset Information:")
+    st.write(data.info())
     
     # Selecting relevant features
     features = data[['Price', 'Number Sold', 'Total Review']]
