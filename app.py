@@ -72,18 +72,6 @@ if uploaded_file is not None:
     ax.set_title("PCA Visualization of Clusters")
     st.pyplot(fig)
     
-    # Dendrogram
-    st.subheader("Dendrogram")
-    linkage_matrix = linkage(scaled_data, method='single')
-    fig, ax = plt.subplots(figsize=(10, 9))
-    dendrogram(linkage_matrix, color_threshold=3, ax=ax)
-    ax.axhline(y=3, color='r', linestyle='--', label='Threshold = 3')
-    ax.set_title("Dendrogram for Agglomerative Clustering")
-    ax.set_xlabel("Index Data")
-    ax.set_ylabel("Distance")
-    ax.legend()
-    st.pyplot(fig)
-    
     # Scatter Plot Number Sold vs Price
     st.subheader("Number Sold vs Price")
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -109,4 +97,16 @@ if uploaded_file is not None:
     axes[1].set_title('Single Price by Category')
     avg_data['Total Review'].plot(kind='bar', ax=axes[2], color='salmon', edgecolor='black')
     axes[2].set_title('Single Total Review by Category')
+    st.pyplot(fig)
+
+     # Dendrogram
+    st.subheader("Dendrogram")
+    linkage_matrix = linkage(scaled_data, method='single')
+    fig, ax = plt.subplots(figsize=(10, 9))
+    dendrogram(linkage_matrix, color_threshold=3, ax=ax)
+    ax.axhline(y=3, color='r', linestyle='--', label='Threshold = 3')
+    ax.set_title("Dendrogram for Agglomerative Clustering")
+    ax.set_xlabel("Index Data")
+    ax.set_ylabel("Distance")
+    ax.legend()
     st.pyplot(fig)
