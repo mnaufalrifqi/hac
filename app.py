@@ -22,10 +22,10 @@ if model_choice == 'HAC':
     uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
 
     if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file, sep=';')
+        data = pd.read_csv(uploaded_file, sep=';')
 
-    st.write("Dataset Information:")
-    st.write(data.describe())  # Gantilah data.info() dengan data.describe()
+        st.write("Dataset Information:")
+        st.write(data.describe())  # Gantilah data.info() dengan data.describe()
 
     # Pastikan hanya mengambil kolom numerik
     numeric_cols = ['Price', 'Number Sold', 'Total Review']
