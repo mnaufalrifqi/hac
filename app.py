@@ -18,8 +18,25 @@ model_choice = st.selectbox('Pilih Model Prediksi:', ['KMEANS', 'HAC'])
 if model_choice == 'HAC':
     st.subheader("HAC Model")
 
-    # Load the dataset from a local file instead of requiring an upload
-    file_path = 'dataset.csv'
+   import streamlit as st
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import joblib
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
+from sklearn.cluster import AgglomerativeClustering, KMeans
+from sklearn.metrics import silhouette_score
+
+# Streamlit UI for model selection
+st.title("Clustering Visualization: KMEANS vs HAC")
+
+model_choice = st.selectbox('Pilih Model Prediksi:', ['KMEANS', 'HAC'])
+
+file_path = 'dataset.csv'  # Define file path outside the condition
+
 try:
     data = pd.read_csv(file_path, sep=';')
     st.write("Dataset successfully loaded from local file.")
@@ -27,6 +44,18 @@ except FileNotFoundError:
     st.error(f"File {file_path} not found. Please check the directory.")
     st.stop()
 
+st.write("Dataset Information:")
+st.write(data.describe())  # Changed from data.info() to a more readable format in Streamlit
+
+if model_choice == 'HAC':
+    st.subheader("Hierarchical Agglomerative Clustering (HAC)")
+    
+    # File uploader
+    uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
+
+    if uploaded_file is not None:
+    data = pd.read_csv(uploaded_file, sep=';')
+    
     st.write("Dataset Information:")
     st.write(data.info())
     
@@ -120,18 +149,79 @@ except FileNotFoundError:
     st.pyplot(fig)
 
 elif model_choice == 'KMEANS':
+    st.subheader("K-Means Clustering")
+
+    # Selecting relevant features
+    features = data[['Price', 'Number Sold', 'Total Review']].dropna()
+
+    # Standardizing the data
+    scaler = StandardScaler()
+    data_scaled = scaler.fit_transform(features)
+
+    # Elbow Method
+    st.subheader("Elbow Method")
+    wcss = []
+    range_n_clusters = range(1, 11)
+
+    for n_clusters in range_n_clusters:
+        kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+        kmeans.fit(data_scaled)
+        wcss.append(kmeans.inertia_)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.plot(range_n_clusters, wcss, marker='o')
+    ax.set_title("Elbow Method")
+    ax.set_xlabel("Number of Clusters")
+    ax.set_ylabel("WCSS (Within-Cluster Sum of Squares)")
+    st.pyplot(fig)
+
+    # Applying KMeans with 4 clusters
+    kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
+    clusters = kmeans.fit_predict(data_scaled)
+    data['Cluster'] = clusters
+
+    # Silhouette Score
+    silhouette_avg = silhouette_score(data_scaled, clusters)
+    st.write(f"Silhouette Score for 4 Clusters: {silhouette_avg}")
+
+    # PCA Visualization
+    st.subheader("PCA Visualization")
+    pca = PCA(n_components=2)
+    reduced_features = pca.fit_transform(data_scaled)
+    pca_df = pd.DataFrame(reduced_features, columns=['PC1', 'PC2'])
+    pca_df['Cluster'] = clusters
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(x='PC1', y='PC2', hue='Cluster', data=pca_df, palette='coolwarm', s=100, edgecolor='k', ax=ax)
+    ax.set_title("K-means Clustering with PCA Reduction")
+    st.pyplot(fig)
+
+    # Scatter Plots
+    st.subheader("Number Sold vs Price")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(data=data, x='Price', y='Number Sold', hue='Cluster', palette='coolwarm', s=100, edgecolor='k', ax=ax)
+    ax.set_title("K-means Clustering: Number Sold vs Price")
+    st.pyplot(fig)
+
+    st.subheader("Number Sold vs Total Review")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(data=data, x='Total Review', y='Number Sold', hue='Cluster', palette='coolwarm', s=100, edgecolor='k', ax=ax)
+    ax.set_title("K-means Clustering: Number Sold vs Total Review")
+    st.pyplot(fig)
+
+    st.subheader("Price vs Total Review")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.scatterplot(data=data, x='Total Review', y='Price', hue='Cluster', palette='coolwarm', s=100, edgecolor='k', ax=ax)
+    ax.set_title("K-means Clustering: Price vs Total Review")
+    st.pyplot(fig)
+
+
+elif model_choice == 'KMEANS':
     st.subheader("KMEANS Model")
 
-    # Load the dataset from a local file instead of requiring an upload
-    file_path = 'dataset.csv'
-
-    try:
-        data = pd.read_csv(file_path, sep=';')
-        st.write("Dataset successfully loaded from local file.")
-    except FileNotFoundError:
-        st.error(f"File {file_path} not found. Please check the directory.")
-        st.stop()
-
+    if uploaded_file is not None:
+    data = pd.read_csv(uploaded_file, sep=';')
+    
     st.write("Dataset Information:")
     st.write(data.info())
     
