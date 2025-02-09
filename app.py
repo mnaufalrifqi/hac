@@ -98,8 +98,8 @@ if uploaded_file is not None:
     avg_data['Total Review'].plot(kind='bar', ax=axes[2], color='salmon', edgecolor='black')
     axes[2].set_title('Single Total Review by Category')
     st.pyplot(fig)
-
-     # Dendrogram
+    
+    # Dendrogram
     st.subheader("Dendrogram")
     linkage_matrix = linkage(scaled_data, method='single')
     fig, ax = plt.subplots(figsize=(10, 9))
