@@ -132,10 +132,10 @@ elif model_choice == 'KMEANS':
         st.error("Silakan unggah file CSV terlebih dahulu.")
         st.stop()
 
-    data = pd.read_csv(uploaded_file, sep=';')
+        data = pd.read_csv(uploaded_file, sep=';')
 
-    st.write("Dataset Information:")
-    st.write(data.describe())  # Menggunakan describe() untuk ringkasan data
+        st.write("Dataset Information:")
+        st.write(data.describe())  # Menggunakan describe() untuk ringkasan data
 
     
     # Selecting relevant features
